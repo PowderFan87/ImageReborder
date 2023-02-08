@@ -25,8 +25,15 @@ def get_exif_from_file(file):
         image = Image(img_file)
         pilimage = PILImage.open(img_file)
 
+        shutterspeed = image.get('exposure_time')
+
+        if shutterspeed < 1:
+            shutterspeed = f'1/{shutterspeed*10000:.0f}'
+        else:
+            shutterspeed = f'{shutterspeed:.0f}'
+
         return {
-            'shutter_speed': image.get('exposure_time'),
+            'shutter_speed': shutterspeed,
             'aperture': image.get('f_number'),
             'focal_length': image.get('focal_length_in_35mm_film'),
             'lens': replace_all(image.get('lens_model'), replacements),
@@ -46,14 +53,14 @@ def reborder(file, meta):
     newimagedraw = ImageDraw.Draw(newimagebase)
 
     # right side information
-    newimagedraw.text((400, 5), f'{meta["lens"]}', (0, 0, 0), font=font)
+    newimagedraw.text((325, 5), f'{meta["lens"]}', (0, 0, 0), font=font)
     newimagedraw.text((1500, 5), f'{meta["model"]}', (0, 0, 0), font=font)
 
     # left side information
-    newimagedraw.text((400, 1985), f'{meta["shutter_speed"]:.2f}s', (0, 0, 0), font=font)
-    newimagedraw.text((650, 1985), f'f{meta["aperture"]:.0f}', (0, 0, 0), font=font)
-    newimagedraw.text((800, 1985), f'ISO {meta["iso"]}', (0, 0, 0), font=font)
-    newimagedraw.text((1500, 1985), f'{meta["focal_length"]}mm', (0, 0, 0), font=font)
+    newimagedraw.text((325, 1985), f'{meta["shutter_speed"]} sec', (0, 0, 0), font=font)
+    newimagedraw.text((650, 1985), f'f/{meta["aperture"]:.1f}', (0, 0, 0), font=font)
+    newimagedraw.text((825, 1985), f'ISO {meta["iso"]}', (0, 0, 0), font=font)
+    newimagedraw.text((1500, 1985), f'{meta["focal_length"]} mm', (0, 0, 0), font=font)
 
     newimagebase = newimagebase.rotate(90, expand=True)
 

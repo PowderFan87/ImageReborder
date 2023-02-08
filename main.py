@@ -34,6 +34,6 @@ if __name__ == '__main__':
 
     newimage.save('out/test1.jpg')
 
-    newimage = tools.reborder('input/DSC08187.jpg', tools.get_exif_from_file('input/DSC08187.jpg'))
+    newimage = tools.reborder('input/DSC08219.jpg', tools.get_exif_from_file('input/DSC08219.jpg'))
 
     newimage.save('out/test2.jpg')
