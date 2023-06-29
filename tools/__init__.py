@@ -27,7 +27,7 @@ def get_exif_from_file(file):
     shutterspeed = image.get('exposure_time')
 
     if shutterspeed < 1:
-        shutterspeed = f'1/{shutterspeed*10000:.0f}'
+        shutterspeed = f'1/{1/shutterspeed:.0f}'
     else:
         shutterspeed = f'{shutterspeed:.0f}'
 
@@ -43,10 +43,13 @@ def get_exif_from_file(file):
     }
 
 
-def reborder(file, meta):
+def reborder(file, meta, exifoverride=None):
     # 2048x2048
     bgsize = (2048, 2048)
     font = ImageFont.truetype('tools/Roboto-Bold.ttf', size=50)
+
+    if exifoverride:
+        meta = {**meta, **exifoverride}
 
     newimagebase = PILImage.new(mode='RGBA', size=bgsize, color=(0, 0, 0, 0))
     newimagedraw = ImageDraw.Draw(newimagebase)
